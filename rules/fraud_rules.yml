@@ -1,0 +1,28 @@
+# Simple rules expressed declaratively
+rules:
+  - id: high_amount
+    description: "Montant très élevé pour compte retail"
+    condition:
+      amount_gt: 10000
+    severity: high
+
+  - id: velocity_5m
+    description: "Plus de 5 transactions en 5 minutes"
+    condition:
+      tx_count_last_minutes:
+        minutes: 5
+        threshold: 5
+    severity: medium
+
+  - id: geolocation_mismatch
+    description: "Distance trop grande depuis dernier login (<6h)"
+    condition:
+      distance_km_gt: 2000
+      last_login_within_hours: 6
+    severity: high
+
+  - id: suspicious_country
+    description: "Transaction depuis pays à risque"
+    condition:
+      merchant_country_in: [RU, NG, CN]
+    severity: high
