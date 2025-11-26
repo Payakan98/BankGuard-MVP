@@ -16,7 +16,7 @@ bank-fraud-detection/
 ├── .gitignore
 ├── data/
 │     └── generate_synthetic_transactions.py
-├── data/transactions_sample.csv       
+├── data/transactions_sample.csv
 ├── notebooks/
 │     └── fraud_detection_analysis.ipynb
 ├── src/
@@ -28,7 +28,7 @@ bank-fraud-detection/
 │     ├── alert_generator.py
 │     └── dashboard.py
 ├── models/
-│     └── fraud_model.joblib            
+│     └── fraud_model.joblib
 ├── rules/
 │     └── fraud_rules.yml
 ├── alerts/                             
