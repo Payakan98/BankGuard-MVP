@@ -11,6 +11,7 @@ BankGuard MVP est un prototype réaliste et pédagogique pour détecter des tran
 
 ## Structure du projet
 bank-fraud-detection/
+
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
