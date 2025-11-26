@@ -1,0 +1,18 @@
+{
+  "tx_id": "932b0261-f212-4db3-b651-3149ceebfbc4",
+  "account_id": "acc_167",
+  "amount": 2.0,
+  "timestamp": "2025-11-26T00:58:05.229962+00:00",
+  "reason": [
+    "ml_anomaly",
+    "velocity_5m"
+  ],
+  "ml_score": -0.0008354217186402613,
+  "rules": [
+    {
+      "id": "velocity_5m",
+      "severity": "medium",
+      "description": "Plus de 5 transactions en 5 minutes"
+    }
+  ]
+}

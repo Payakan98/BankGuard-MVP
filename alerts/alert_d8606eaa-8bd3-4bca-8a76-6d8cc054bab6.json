@@ -1,0 +1,24 @@
+{
+  "tx_id": "d8606eaa-8bd3-4bca-8a76-6d8cc054bab6",
+  "account_id": "acc_486",
+  "amount": 9216.81,
+  "timestamp": "2025-11-26T02:12:35.229962+00:00",
+  "reason": [
+    "ml_anomaly",
+    "velocity_5m",
+    "suspicious_country"
+  ],
+  "ml_score": -0.01919189934729082,
+  "rules": [
+    {
+      "id": "velocity_5m",
+      "severity": "medium",
+      "description": "Plus de 5 transactions en 5 minutes"
+    },
+    {
+      "id": "suspicious_country",
+      "severity": "high",
+      "description": "Transaction depuis pays \u00c3\u00a0 risque"
+    }
+  ]
+}

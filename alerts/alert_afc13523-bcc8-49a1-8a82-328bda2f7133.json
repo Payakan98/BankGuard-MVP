@@ -1,0 +1,18 @@
+{
+  "tx_id": "afc13523-bcc8-49a1-8a82-328bda2f7133",
+  "account_id": "acc_211",
+  "amount": 9424.21,
+  "timestamp": "2025-11-26T06:13:30.229962+00:00",
+  "reason": [
+    "ml_anomaly",
+    "suspicious_country"
+  ],
+  "ml_score": -0.03535427877021602,
+  "rules": [
+    {
+      "id": "suspicious_country",
+      "severity": "high",
+      "description": "Transaction depuis pays \u00c3\u00a0 risque"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "tx_id": "c5bb7d12-01c1-4a69-b0de-57dc4a33586f",
+  "account_id": "acc_240",
+  "amount": 20.32,
+  "timestamp": "2025-11-26T03:00:38.229962+00:00",
+  "reason": [
+    "suspicious_country"
+  ],
+  "ml_score": 0.2371209521417238,
+  "rules": [
+    {
+      "id": "suspicious_country",
+      "severity": "high",
+      "description": "Transaction depuis pays \u00c3\u00a0 risque"
+    }
+  ]
+}

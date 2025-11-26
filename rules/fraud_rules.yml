@@ -1,4 +1,3 @@
-# Simple rules expressed declaratively
 rules:
   - id: high_amount
     description: "Montant très élevé pour compte retail"
@@ -13,13 +12,6 @@ rules:
         minutes: 5
         threshold: 5
     severity: medium
-
-  - id: geolocation_mismatch
-    description: "Distance trop grande depuis dernier login (<6h)"
-    condition:
-      distance_km_gt: 2000
-      last_login_within_hours: 6
-    severity: high
 
   - id: suspicious_country
     description: "Transaction depuis pays à risque"

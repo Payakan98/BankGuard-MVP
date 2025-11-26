@@ -1,0 +1,17 @@
+{
+  "tx_id": "eded0eb2-e530-45fa-830e-7acd75bb4a58",
+  "account_id": "acc_1201",
+  "amount": 53.88,
+  "timestamp": "2025-11-26T05:17:09.229962+00:00",
+  "reason": [
+    "suspicious_country"
+  ],
+  "ml_score": 0.25150560302212904,
+  "rules": [
+    {
+      "id": "suspicious_country",
+      "severity": "high",
+      "description": "Transaction depuis pays \u00c3\u00a0 risque"
+    }
+  ]
+}

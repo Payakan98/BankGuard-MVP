@@ -1,0 +1,23 @@
+{
+  "tx_id": "d047c93e-1820-433a-94d5-2a3a3b402a37",
+  "account_id": "acc_1375",
+  "amount": 313.6,
+  "timestamp": "2025-11-26T01:11:23.229962+00:00",
+  "reason": [
+    "velocity_5m",
+    "suspicious_country"
+  ],
+  "ml_score": 0.15179031639214857,
+  "rules": [
+    {
+      "id": "velocity_5m",
+      "severity": "medium",
+      "description": "Plus de 5 transactions en 5 minutes"
+    },
+    {
+      "id": "suspicious_country",
+      "severity": "high",
+      "description": "Transaction depuis pays \u00c3\u00a0 risque"
+    }
+  ]
+}

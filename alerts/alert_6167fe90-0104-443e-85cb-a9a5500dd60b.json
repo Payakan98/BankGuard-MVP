@@ -1,0 +1,24 @@
+{
+  "tx_id": "6167fe90-0104-443e-85cb-a9a5500dd60b",
+  "account_id": "acc_870",
+  "amount": 5234.23,
+  "timestamp": "2025-11-26T02:27:02.229962+00:00",
+  "reason": [
+    "ml_anomaly",
+    "velocity_5m",
+    "suspicious_country"
+  ],
+  "ml_score": -0.005390009954571617,
+  "rules": [
+    {
+      "id": "velocity_5m",
+      "severity": "medium",
+      "description": "Plus de 5 transactions en 5 minutes"
+    },
+    {
+      "id": "suspicious_country",
+      "severity": "high",
+      "description": "Transaction depuis pays \u00c3\u00a0 risque"
+    }
+  ]
+}

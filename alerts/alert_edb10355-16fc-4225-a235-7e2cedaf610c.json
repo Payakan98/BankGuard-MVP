@@ -1,0 +1,17 @@
+{
+  "tx_id": "edb10355-16fc-4225-a235-7e2cedaf610c",
+  "account_id": "acc_1241",
+  "amount": 13.89,
+  "timestamp": "2025-11-26T02:28:45.229962+00:00",
+  "reason": [
+    "suspicious_country"
+  ],
+  "ml_score": 0.21186699936182696,
+  "rules": [
+    {
+      "id": "suspicious_country",
+      "severity": "high",
+      "description": "Transaction depuis pays \u00c3\u00a0 risque"
+    }
+  ]
+}

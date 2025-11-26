@@ -1,0 +1,24 @@
+{
+  "tx_id": "ef31e824-cf6a-42a3-b0b7-42ae76a7d697",
+  "account_id": "acc_1330",
+  "amount": 11263.78,
+  "timestamp": "2025-11-26T01:31:40.229962+00:00",
+  "reason": [
+    "ml_anomaly",
+    "high_amount",
+    "suspicious_country"
+  ],
+  "ml_score": -0.022279630566019337,
+  "rules": [
+    {
+      "id": "high_amount",
+      "severity": "high",
+      "description": "Montant tr\u00c3\u00a8s \u00c3\u00a9lev\u00c3\u00a9 pour compte retail"
+    },
+    {
+      "id": "suspicious_country",
+      "severity": "high",
+      "description": "Transaction depuis pays \u00c3\u00a0 risque"
+    }
+  ]
+}

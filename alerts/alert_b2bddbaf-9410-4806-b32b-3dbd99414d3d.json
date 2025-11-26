@@ -1,0 +1,24 @@
+{
+  "tx_id": "b2bddbaf-9410-4806-b32b-3dbd99414d3d",
+  "account_id": "acc_763",
+  "amount": 8531.31,
+  "timestamp": "2025-11-26T01:25:34.229962+00:00",
+  "reason": [
+    "ml_anomaly",
+    "velocity_5m",
+    "suspicious_country"
+  ],
+  "ml_score": -0.020098507204589833,
+  "rules": [
+    {
+      "id": "velocity_5m",
+      "severity": "medium",
+      "description": "Plus de 5 transactions en 5 minutes"
+    },
+    {
+      "id": "suspicious_country",
+      "severity": "high",
+      "description": "Transaction depuis pays \u00c3\u00a0 risque"
+    }
+  ]
+}

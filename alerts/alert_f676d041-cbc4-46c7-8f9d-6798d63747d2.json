@@ -1,0 +1,17 @@
+{
+  "tx_id": "f676d041-cbc4-46c7-8f9d-6798d63747d2",
+  "account_id": "acc_195",
+  "amount": 39.43,
+  "timestamp": "2025-11-26T05:40:50.229962+00:00",
+  "reason": [
+    "suspicious_country"
+  ],
+  "ml_score": 0.2529187468337444,
+  "rules": [
+    {
+      "id": "suspicious_country",
+      "severity": "high",
+      "description": "Transaction depuis pays \u00c3\u00a0 risque"
+    }
+  ]
+}

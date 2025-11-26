@@ -1,0 +1,23 @@
+{
+  "tx_id": "cadcee84-f259-4c35-81fe-cd33d51d9456",
+  "account_id": "acc_500",
+  "amount": 30.73,
+  "timestamp": "2025-11-26T00:56:02.229962+00:00",
+  "reason": [
+    "velocity_5m",
+    "suspicious_country"
+  ],
+  "ml_score": 0.05876741748694969,
+  "rules": [
+    {
+      "id": "velocity_5m",
+      "severity": "medium",
+      "description": "Plus de 5 transactions en 5 minutes"
+    },
+    {
+      "id": "suspicious_country",
+      "severity": "high",
+      "description": "Transaction depuis pays \u00c3\u00a0 risque"
+    }
+  ]
+}
