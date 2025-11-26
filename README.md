@@ -1,5 +1,5 @@
 # BankGuard MVP — Fraud & Threat Detection System
-BankGuard MVP est un prototype réaliste et pédagogique pour détecter des transactions frauduleuses et analyser des logs. Ce dépôt est conçu pour démontrer des compétences pratiques recherchées par les recruteurs (Analyste SOC L1/L2, Fraud Analyst, Junior Security Engineer).
+BankGuard MVP est un prototype réaliste et pédagogique pour détecter des transactions frauduleuses et analyser des logs.
 
 ## Fonctionnalités (MVP)
 - Génération d'un dataset synthétique de transactions.
