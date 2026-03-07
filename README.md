@@ -170,7 +170,7 @@ bank-fraud-detection/
 ### 1. Install
 
 ```bash
-git clone https://github.com/your-username/bank-fraud-detection.git
+git clone https://github.com/Payakan98/bank-fraud-detection.git
 cd bank-fraud-detection
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
