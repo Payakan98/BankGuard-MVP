@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # BankGuard — Real-Time Fraud & Threat Detection
+=======
+# BankGuard MVP — Fraud & Threat Detection System
+BankGuard MVP est un prototype réaliste et pédagogique pour détecter des transactions frauduleuses et analyser des logs.
+>>>>>>> 52ba2d3ce13d8e189091077907dcd97ebbbfaecc
 
 <p align="center">
   <img src="images/bankguard_banner.png" alt="BankGuard banner" width="720"/>
@@ -133,15 +138,27 @@ Results on 50 000 synthetic transactions (1.5 % fraud rate, evaluated after thre
 
 ```
 bank-fraud-detection/
+<<<<<<< HEAD
 │
 ├── config.py                    ← All hyperparameters & paths (single source of truth)
 ├── Makefile                     ← One-command workflows
+=======
+
+├── README.md
+>>>>>>> 52ba2d3ce13d8e189091077907dcd97ebbbfaecc
 ├── requirements.txt
 │
 ├── data/
+<<<<<<< HEAD
 │   ├── generate_synthetic_transactions.py
 │   └── transactions_sample.csv
 │
+=======
+│     └── generate_synthetic_transactions.py
+├── data/transactions_sample.csv
+├── notebooks/
+│     └── fraud_detection_analysis.ipynb
+>>>>>>> 52ba2d3ce13d8e189091077907dcd97ebbbfaecc
 ├── src/
 │   ├── feature_engineering.py   ← Velocity, merchant risk, cyclic time encoding
 │   ├── model_train.py           ← IsoForest + LOF ensemble, SHAP, evaluation
@@ -151,9 +168,13 @@ bank-fraud-detection/
 │   └── dashboard.py             ← Flask real-time dashboard
 │
 ├── models/
+<<<<<<< HEAD
 │   ├── fraud_model.joblib       ← Serialised model bundle
 │   └── metrics.json             ← Auto-generated evaluation metrics
 │
+=======
+│     └── fraud_model.joblib
+>>>>>>> 52ba2d3ce13d8e189091077907dcd97ebbbfaecc
 ├── rules/
 │   └── fraud_rules.yml
 │
@@ -169,6 +190,7 @@ bank-fraud-detection/
 
 ### 1. Install
 
+<<<<<<< HEAD
 ```bash
 git clone https://github.com/your-username/bank-fraud-detection.git
 cd bank-fraud-detection
@@ -242,3 +264,6 @@ CFG.features.velocity_windows = [1, 6, 24, 48]
 ## License
 
 MIT © 2024 — contributions welcome.
+=======
+##Auteur: Islem CHOKRI
+>>>>>>> 52ba2d3ce13d8e189091077907dcd97ebbbfaecc
