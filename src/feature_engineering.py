@@ -138,12 +138,14 @@ FEATURE_COLUMNS = [
     for agg in ("count", "sum")
 ]
 
+COLUMN_MAP = {
+    "tx_id":            "transaction_id",
+    "account_id":       "card_id",
+    "merchant_country": "country",
+    "label":            "is_fraud",
+}
 
-def build_features(
-    df: pd.DataFrame,
-    ref_df: Optional[pd.DataFrame] = None,
-    verbose: bool = True,
-) -> pd.DataFrame:
+def build_features(df, ref_df=None, verbose=True):
     """
     Full feature-engineering pipeline.
 
@@ -157,6 +159,8 @@ def build_features(
     -------
     DataFrame with FEATURE_COLUMNS added (original columns preserved).
     """
+
+    df = df.rename(columns=COLUMN_MAP)
     steps = [
         ("time features",     _add_time_features),
         ("risk flags",        _add_risk_flags),
