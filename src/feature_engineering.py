@@ -4,14 +4,14 @@ Transforms raw transactions into a rich feature matrix.
 
 Features produced
 ─────────────────
-• amount_log          log1p-normalised amount
+• amount_log           log1p-normalised amount
 • hour_sin / hour_cos  cyclic encoding of hour-of-day
-• is_weekend          binary weekend flag
-• country_risk        0/1 high-risk country flag
-• mcc_risk            0/1 high-risk MCC code flag
+• is_weekend           binary weekend flag
+• country_risk         0/1 high-risk country flag (optional col)
+• mcc_risk             0/1 high-risk MCC code flag (optional col)
 • velocity_{w}h_count  number of tx by same card in last w hours
 • velocity_{w}h_sum    total spend by same card in last w hours
-• amount_vs_mean_ratio  tx amount vs card historical mean
+• amount_vs_mean_ratio tx amount vs card historical mean
 • merchant_risk_score  fraud-rate proxy per merchant (smoothed)
 """
 
@@ -24,6 +24,18 @@ import pandas as pd
 from config import CFG
 
 logger = logging.getLogger(__name__)
+
+
+# ── Column name normalisation ─────────────────────────────────────────────────
+# Maps your CSV column names → internal names used throughout the pipeline.
+# Add / change entries here whenever the source schema changes.
+
+COLUMN_MAP = {
+    "tx_id":            "transaction_id",
+    "account_id":       "card_id",
+    "merchant_country": "country",
+    "label":            "is_fraud",
+}
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -51,8 +63,21 @@ def _add_time_features(df: pd.DataFrame) -> pd.DataFrame:
 
 def _add_risk_flags(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
-    df["country_risk"] = df["country"].isin(CFG.data.high_risk_countries).astype(int)
-    df["mcc_risk"] = df["mcc_code"].isin(CFG.data.high_risk_mcc_codes).astype(int)
+
+    # Country risk — column may be absent in some datasets
+    if "country" in df.columns:
+        df["country_risk"] = df["country"].isin(CFG.data.high_risk_countries).astype(int)
+    else:
+        logger.warning("Column 'country' not found — country_risk set to 0")
+        df["country_risk"] = 0
+
+    # MCC risk — column is optional
+    if "mcc_code" in df.columns:
+        df["mcc_risk"] = df["mcc_code"].isin(CFG.data.high_risk_mcc_codes).astype(int)
+    else:
+        logger.warning("Column 'mcc_code' not found — mcc_risk set to 0")
+        df["mcc_risk"] = 0
+
     return df
 
 
@@ -66,10 +91,9 @@ def _add_velocity_features(df: pd.DataFrame) -> pd.DataFrame:
 
     for window_h in CFG.features.velocity_windows:
         window_str = f"{window_h}h"
-        count_col = f"velocity_{window_h}h_count"
-        sum_col   = f"velocity_{window_h}h_sum"
+        count_col  = f"velocity_{window_h}h_count"
+        sum_col    = f"velocity_{window_h}h_sum"
 
-        # Rolling per card_id
         grp = df.groupby("card_id")["amount"]
         df[count_col] = grp.transform(
             lambda s: s.rolling(window_str, closed="left").count()
@@ -96,29 +120,29 @@ def _add_amount_features(df: pd.DataFrame) -> pd.DataFrame:
 def _add_merchant_risk(df: pd.DataFrame, ref_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
     """
     Smoothed merchant risk score: fraud rate per merchant, shrunk toward the
-    global mean when sample size is small (additive smoothing).
+    global mean when sample size is small (additive smoothing / Bayesian shrinkage).
     ref_df: training reference. Pass None to use df itself (fit+transform).
     """
     source = ref_df if ref_df is not None else df
     min_tx = CFG.features.merchant_risk_min_tx
     global_rate = source["is_fraud"].mean() if "is_fraud" in source.columns else 0.015
 
-    merchant_stats = (
-        source.groupby("merchant_id")["is_fraud"]
-        .agg(["sum", "count"])
-        .rename(columns={"sum": "fraud_count", "count": "total"})
-    )
-    merchant_stats["risk_score"] = (
-        (merchant_stats["fraud_count"] + global_rate * min_tx)
-        / (merchant_stats["total"] + min_tx)
-    )
+    if "is_fraud" in source.columns:
+        merchant_stats = (
+            source.groupby("merchant_id")["is_fraud"]
+            .agg(["sum", "count"])
+            .rename(columns={"sum": "fraud_count", "count": "total"})
+        )
+        merchant_stats["risk_score"] = (
+            (merchant_stats["fraud_count"] + global_rate * min_tx)
+            / (merchant_stats["total"] + min_tx)
+        )
+        risk_map = merchant_stats["risk_score"]
+    else:
+        risk_map = pd.Series(dtype=float)
 
     df = df.copy()
-    df["merchant_risk_score"] = (
-        df["merchant_id"]
-        .map(merchant_stats["risk_score"])
-        .fillna(global_rate)
-    )
+    df["merchant_risk_score"] = df["merchant_id"].map(risk_map).fillna(global_rate)
     return df
 
 
@@ -138,14 +162,12 @@ FEATURE_COLUMNS = [
     for agg in ("count", "sum")
 ]
 
-COLUMN_MAP = {
-    "tx_id":            "transaction_id",
-    "account_id":       "card_id",
-    "merchant_country": "country",
-    "label":            "is_fraud",
-}
 
-def build_features(df, ref_df=None, verbose=True):
+def build_features(
+    df: pd.DataFrame,
+    ref_df: Optional[pd.DataFrame] = None,
+    verbose: bool = True,
+) -> pd.DataFrame:
     """
     Full feature-engineering pipeline.
 
@@ -159,8 +181,9 @@ def build_features(df, ref_df=None, verbose=True):
     -------
     DataFrame with FEATURE_COLUMNS added (original columns preserved).
     """
-
+    # Normalise column names to internal schema
     df = df.rename(columns=COLUMN_MAP)
+
     steps = [
         ("time features",     _add_time_features),
         ("risk flags",        _add_risk_flags),
