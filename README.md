@@ -1,10 +1,6 @@
 # BankGuard — Real-Time Fraud & Threat Detection
 
 <p align="center">
-  <img src="images/bankguard_banner.png" alt="BankGuard banner" width="720"/>
-</p>
-
-<p align="center">
   <img alt="Python" src="https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white"/>
   <img alt="scikit-learn" src="https://img.shields.io/badge/scikit--learn-1.4-F7931E?logo=scikit-learn&logoColor=white"/>
   <img alt="Flask" src="https://img.shields.io/badge/Flask-3.x-000000?logo=flask"/>
