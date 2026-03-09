@@ -184,6 +184,10 @@ def build_features(
     # Normalise column names to internal schema
     df = df.rename(columns=COLUMN_MAP)
 
+    if "is_fraud" in df.columns and df["is_fraud"].dtype == object:
+        df["is_fraud"] = df["is_fraud"].map({"fraud": 1, "genuine": 0}).fillna(0).astype(int)
+    # ─────────────────────────
+    
     steps = [
         ("time features",     _add_time_features),
         ("risk flags",        _add_risk_flags),

@@ -1,20 +1,18 @@
 rules:
-  - id: high_amount
-    description: "Montant très élevé pour compte retail"
-    condition:
-      amount_gt: 10000
-    severity: high
+  - name: HIGH_AMOUNT
+    condition: "amount > 10000"
 
-  - id: velocity_5m
-    description: "Plus de 5 transactions en 5 minutes"
-    condition:
-      tx_count_last_minutes:
-        minutes: 5
-        threshold: 5
-    severity: medium
+  - name: HIGH_AMOUNT_HIGH_RISK_COUNTRY
+    condition: "amount > 5000 and country_risk == 1"
 
-  - id: suspicious_country
-    description: "Transaction depuis pays à risque"
-    condition:
-      merchant_country_in: [RU, NG, CN]
-    severity: high
+  - name: VELOCITY_SPIKE_1H
+    condition: "velocity_1h_count > 10"
+
+  - name: VELOCITY_SPIKE_6H
+    condition: "velocity_6h_count > 20"
+
+  - name: HIGH_MERCHANT_RISK
+    condition: "merchant_risk_score > 0.5"
+
+  - name: ANOMALOUS_HOUR
+    condition: "hour_sin < -0.9"
