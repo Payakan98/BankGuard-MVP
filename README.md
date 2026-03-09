@@ -162,6 +162,14 @@ bank-fraud-detection/
 
 ---
 
+## Screenshots
+
+![Dashboard](docs/screenshots/01_dashboard_overview.png)
+![Pipeline](docs/screenshots/02_pipeline_output.png)
+![Alerts](docs/screenshots/03_alerts_json.png)
+
+--
+
 ## Quick Start
 
 ### 1. Install
