@@ -168,7 +168,7 @@ bank-fraud-detection/
 ![Pipeline](docs/screenshots/02_pipeline_output.png)
 ![Alerts](docs/screenshots/03_alerts_json.png)
 
---
+---
 
 ## Quick Start
 
