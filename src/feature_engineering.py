@@ -27,8 +27,6 @@ logger = logging.getLogger(__name__)
 
 
 # ── Column name normalisation ─────────────────────────────────────────────────
-# Maps your CSV column names → internal names used throughout the pipeline.
-# Add / change entries here whenever the source schema changes.
 
 COLUMN_MAP = {
     "tx_id":            "transaction_id",
@@ -41,7 +39,6 @@ COLUMN_MAP = {
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _cyclic_encode(series: pd.Series, period: int) -> tuple[pd.Series, pd.Series]:
-    """Encode a cyclic variable (e.g. hour 0-23) as (sin, cos) pair."""
     angle = 2 * np.pi * series / period
     return np.sin(angle), np.cos(angle)
 
@@ -64,14 +61,12 @@ def _add_time_features(df: pd.DataFrame) -> pd.DataFrame:
 def _add_risk_flags(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
 
-    # Country risk — column may be absent in some datasets
     if "country" in df.columns:
         df["country_risk"] = df["country"].isin(CFG.data.high_risk_countries).astype(int)
     else:
         logger.warning("Column 'country' not found — country_risk set to 0")
         df["country_risk"] = 0
 
-    # MCC risk — column is optional
     if "mcc_code" in df.columns:
         df["mcc_risk"] = df["mcc_code"].isin(CFG.data.high_risk_mcc_codes).astype(int)
     else:
@@ -82,10 +77,6 @@ def _add_risk_flags(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _add_velocity_features(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Compute rolling transaction count and spend per card over multiple time windows.
-    Requires a sorted DataFrame with a datetime 'timestamp' column.
-    """
     df = df.sort_values("timestamp").copy()
     df = df.set_index("timestamp")
 
@@ -111,23 +102,22 @@ def _add_amount_features(df: pd.DataFrame) -> pd.DataFrame:
     if CFG.features.amount_log_transform:
         df["amount_log"] = np.log1p(df["amount"])
 
-    # Amount vs card historical mean (deviation signal)
     card_mean = df.groupby("card_id")["amount"].transform("mean")
     df["amount_vs_mean_ratio"] = df["amount"] / (card_mean + 1e-9)
     return df
 
 
 def _add_merchant_risk(df: pd.DataFrame, ref_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
-    """
-    Smoothed merchant risk score: fraud rate per merchant, shrunk toward the
-    global mean when sample size is small (additive smoothing / Bayesian shrinkage).
-    ref_df: training reference. Pass None to use df itself (fit+transform).
-    """
     source = ref_df if ref_df is not None else df
     min_tx = CFG.features.merchant_risk_min_tx
-    global_rate = source["is_fraud"].mean() if "is_fraud" in source.columns else 0.015
 
+    # Convert is_fraud to numeric if still strings
     if "is_fraud" in source.columns:
+        if source["is_fraud"].dtype == object:
+            source = source.copy()
+            source["is_fraud"] = source["is_fraud"].map({"fraud": 1, "genuine": 0}).fillna(0).astype(int)
+        global_rate = float(source["is_fraud"].mean())
+
         merchant_stats = (
             source.groupby("merchant_id")["is_fraud"]
             .agg(["sum", "count"])
@@ -139,6 +129,7 @@ def _add_merchant_risk(df: pd.DataFrame, ref_df: Optional[pd.DataFrame] = None) 
         )
         risk_map = merchant_stats["risk_score"]
     else:
+        global_rate = 0.015
         risk_map = pd.Series(dtype=float)
 
     df = df.copy()
@@ -168,26 +159,13 @@ def build_features(
     ref_df: Optional[pd.DataFrame] = None,
     verbose: bool = True,
 ) -> pd.DataFrame:
-    """
-    Full feature-engineering pipeline.
-
-    Parameters
-    ----------
-    df      : raw transactions DataFrame
-    ref_df  : reference DataFrame for merchant risk (use training split to avoid leakage)
-    verbose : log shape at each step
-
-    Returns
-    -------
-    DataFrame with FEATURE_COLUMNS added (original columns preserved).
-    """
     # Normalise column names to internal schema
     df = df.rename(columns=COLUMN_MAP)
 
+    # Convert is_fraud to numeric if still strings
     if "is_fraud" in df.columns and df["is_fraud"].dtype == object:
         df["is_fraud"] = df["is_fraud"].map({"fraud": 1, "genuine": 0}).fillna(0).astype(int)
-    # ─────────────────────────
-    
+
     steps = [
         ("time features",     _add_time_features),
         ("risk flags",        _add_risk_flags),
@@ -211,5 +189,4 @@ def build_features(
 
 
 def get_feature_matrix(df: pd.DataFrame) -> np.ndarray:
-    """Return numpy array of FEATURE_COLUMNS (for model input)."""
     return df[FEATURE_COLUMNS].to_numpy(dtype=np.float32)
