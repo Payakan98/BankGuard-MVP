@@ -240,8 +240,7 @@ CFG.features.velocity_windows = [1, 6, 24, 48]
 | 🔜 High | Streaming ingestion (Kafka / Redis Streams) |
 | 🔧 Medium | Graph-based detection (card–merchant bipartite network) |
 | 🔧 Medium | SHAP waterfall charts in dashboard |
-| 💡 Idea | Online learning (model drift detection + incremental refit) |
-| 💡 Idea | Docker Compose deployment |
+
 
 ---
 
