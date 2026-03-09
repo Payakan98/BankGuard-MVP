@@ -111,9 +111,9 @@ def _add_merchant_risk(df: pd.DataFrame, ref_df: Optional[pd.DataFrame] = None) 
     source = ref_df if ref_df is not None else df
     min_tx = CFG.features.merchant_risk_min_tx
 
-    # Convert is_fraud to numeric if still strings
     if "is_fraud" in source.columns:
-        if source["is_fraud"].dtype == object:
+        # Convert to numeric regardless of string dtype variant
+        if not pd.api.types.is_numeric_dtype(source["is_fraud"]):
             source = source.copy()
             source["is_fraud"] = source["is_fraud"].map({"fraud": 1, "genuine": 0}).fillna(0).astype(int)
         global_rate = float(source["is_fraud"].mean())
@@ -163,7 +163,7 @@ def build_features(
     df = df.rename(columns=COLUMN_MAP)
 
     # Convert is_fraud to numeric if still strings
-    if "is_fraud" in df.columns and df["is_fraud"].dtype == object:
+    if "is_fraud" in df.columns and not pd.api.types.is_numeric_dtype(df["is_fraud"]):
         df["is_fraud"] = df["is_fraud"].map({"fraud": 1, "genuine": 0}).fillna(0).astype(int)
 
     steps = [
