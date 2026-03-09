@@ -1,0 +1,31 @@
+name: BankGuard CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate synthetic data
+        run: python data/generate_synthetic_transactions.py --n 10000 --out data/transactions_sample.csv
+
+      - name: Train model
+        run: python src/model_train.py --input data/transactions_sample.csv --eval --no-cache
+
+      - name: Run pipeline
+        run: python src/pipeline.py --input data/transactions_sample.csv --dry-run

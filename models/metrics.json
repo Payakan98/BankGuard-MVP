@@ -1,0 +1,9 @@
+{
+  "auprc": 0.2554,
+  "auc_roc": 0.9844,
+  "threshold": 0.3611932910136971,
+  "fraud_f1": 0.3906,
+  "fraud_prec": 0.2695,
+  "fraud_recall": 0.7093,
+  "support_fraud": 516
+}
