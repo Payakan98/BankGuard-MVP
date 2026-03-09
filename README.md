@@ -10,6 +10,7 @@
   <img alt="Flask" src="https://img.shields.io/badge/Flask-3.x-000000?logo=flask"/>
   <img alt="License" src="https://img.shields.io/badge/license-MIT-green"/>
   <img alt="Status" src="https://img.shields.io/badge/status-MVP-blue"/>
+  <img alt="CI" src="https://github.com/Payakan98/BankGuard-MVP/actions/workflows/ci.yml/badge.svg"/>
 </p>
 
 > **An end-to-end fraud detection system combining declarative rules and unsupervised ML — designed for production readability and portfolio impact.**
@@ -230,8 +231,9 @@ CFG.features.velocity_windows = [1, 6, 24, 48]
 
 | Priority | Feature |
 |---|---|
-| 🔜 High | Streaming ingestion (Kafka / Redis Streams) |
+| ✅ Done | CI/CD pipeline (GitHub Actions — train + detect on push) |
 | 🔜 High | REST API endpoint (`/score` + `/alerts`) |
+| 🔜 High | Streaming ingestion (Kafka / Redis Streams) |
 | 🔧 Medium | Graph-based detection (card–merchant bipartite network) |
 | 🔧 Medium | SHAP waterfall charts in dashboard |
 | 💡 Idea | Online learning (model drift detection + incremental refit) |
