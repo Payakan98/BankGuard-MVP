@@ -254,7 +254,7 @@ curl -X POST http://localhost:5000/api/score \
 | Priority | Feature |
 |---|---|
 | ✅ Done | CI/CD pipeline (GitHub Actions — train + detect on push) |
-| 🔜 High | REST API endpoint (`/score` + `/alerts`) |
+| ✅ Done | REST API endpoint (`/score` + `/alerts`) |
 | 🔜 High | Streaming ingestion (Kafka / Redis Streams) |
 | 🔧 Medium | Graph-based detection (card–merchant bipartite network) |
 | 🔧 Medium | SHAP waterfall charts in dashboard |
