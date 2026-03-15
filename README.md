@@ -255,6 +255,7 @@ curl -X POST http://localhost:5000/api/score \
 |---|---|
 | ✅ Done | CI/CD pipeline (GitHub Actions — train + detect on push) |
 | ✅ Done | REST API endpoint (`/score` + `/alerts`) |
+| ✅ Done | Docker — Dockerfile + docker-compose |
 | 🔜 High | Streaming ingestion (Kafka / Redis Streams) |
 | 🔧 Medium | Graph-based detection (card–merchant bipartite network) |
 | 🔧 Medium | SHAP waterfall charts in dashboard |
