@@ -12,6 +12,8 @@ import json
 import sys
 from datetime import datetime
 from pathlib import Path
+import pandas as pd
+from flask import Flask, jsonify, render_template_string, request
 
 from flask import Flask, jsonify, render_template_string
 
@@ -567,6 +569,62 @@ def api_alerts():
     return jsonify({"alerts": alerts, "stats": compute_stats(alerts)})
 
 
+@app.route("/api/score", methods=["POST"])
+def api_score():
+    """
+    Score a single transaction in real time.
+    
+    POST /api/score
+    {
+        "transaction_id": "tx_001",
+        "card_id": "acc_123",
+        "amount": 2500.00,
+        "merchant_id": "merch_456",
+        "timestamp": "2026-03-14T22:00:00",
+        "merchant_country": "CA",
+        "channel": "online",
+        "currency": "CAD",
+        "ip_address": "192.168.1.1",
+        "device_id": "dev_001",
+        "status": "pending"
+    }
+    """
+    import joblib
+    from src.feature_engineering import build_features, get_feature_matrix
+    from src.model_train import ensemble_score
+
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No JSON body provided"}), 400
+
+    try:
+        df = pd.DataFrame([data])
+        df = build_features(df, verbose=False)
+        X  = get_feature_matrix(df)
+
+        bundle    = joblib.load(CFG.paths.models_dir / "fraud_model.joblib")
+        scores    = ensemble_score(X, bundle["if_pipe"], bundle["lof_pipe"])
+        score     = float(scores[0])
+        threshold = bundle["threshold"]
+
+        def _severity(s):
+            t = CFG.alerts.severity_thresholds
+            if s >= t["CRITICAL"]: return "CRITICAL"
+            if s >= t["HIGH"]:     return "HIGH"
+            if s >= t["MEDIUM"]:   return "MEDIUM"
+            return "LOW"
+
+        return jsonify({
+            "transaction_id": data.get("transaction_id", "N/A"),
+            "anomaly_score":  round(score, 4),
+            "threshold":      round(threshold, 4),
+            "flagged":        score >= threshold,
+            "severity":       _severity(score),
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
