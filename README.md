@@ -230,6 +230,24 @@ CFG.features.velocity_windows = [1, 6, 24, 48]
 ```
 
 ---
+## API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/` | Dashboard temps réel |
+| GET | `/api/alerts` | Liste des alertes avec stats |
+| POST | `/api/score` | Scorer une transaction en temps réel |
+
+**Exemple `/api/score` :**
+```bash
+curl -X POST http://localhost:5000/api/score \
+  -H "Content-Type: application/json" \
+  -d '{"transaction_id":"tx_001","card_id":"acc_123","amount":9999,
+       "merchant_id":"merch_1","timestamp":"2026-03-14T22:00:00",
+       "merchant_country":"RU","channel":"online","currency":"CAD",
+       "ip_address":"1.1.1.1","device_id":"dev_1","status":"pending"}'
+```
+---
 
 ## Roadmap
 
