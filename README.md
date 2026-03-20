@@ -38,6 +38,14 @@ The system processes 50 000 synthetic transactions in under 8 seconds on a stand
 
 ---
 
+## Production Considerations
+
+- Structured logging at each pipeline stage (latency + traceability)
+- Deterministic pipeline (reproducible results via config.py)
+- Modular architecture enabling independent scaling of ingestion, scoring, and alerting
+- Designed for integration with external systems (SIEM, Kafka, monitoring tools)
+---
+
 ## Architecture
 
 ```
