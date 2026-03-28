@@ -628,6 +628,7 @@ def api_score():
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    cfg = CFG.dashboard
-    print(f"\n  BankGuard Dashboard → http://{cfg.host}:{cfg.port}\n")
-    app.run(host=cfg.host, port=cfg.port, debug=True)
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    print(f"\n  BankGuard Dashboard → http://0.0.0.0:{port}\n")
+    app.run(host="0.0.0.0", port=port, debug=False)

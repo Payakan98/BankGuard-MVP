@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: bankguard
+    runtime: python
+    buildCommand: |
+      pip install -r requirements-ci.txt
+      python data/generate_synthetic_transactions.py --n 10000 --out data/transactions_sample.csv
+      python src/model_train.py --input data/transactions_sample.csv --eval --no-cache
+    startCommand: python src/dashboard.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
