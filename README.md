@@ -11,6 +11,12 @@
 
 > **An end-to-end fraud detection system combining declarative rules and unsupervised ML — designed for production readability and portfolio impact.**
 
+## 🔗 Live Demo
+
+**[bankguard-mvp.onrender.com](https://bankguard-mvp.onrender.com)**
+
+> Note: First load may take 30–60 seconds (free tier cold start)
+
 ---
 
 ## Table of Contents
@@ -207,21 +213,9 @@ python src/model_train.py --input data/transactions_sample.csv --eval --shap
 python src/pipeline.py --input data/transactions_sample.csv
 ```
 
-### 5. Launch the dashboard
+### 5. Or access the live demo directly
 
-```bash
-python src/dashboard.py
-# → http://localhost:5000
-```
-
-### Or — use Make
-
-```bash
-make all          # generate → train → detect → dashboard
-make train        # train only
-make detect       # run pipeline only
-make clean        # remove models, alerts, logs
-```
+🔗 [https://bankguard-mvp.onrender.com](https://bankguard-mvp.onrender.com)
 
 ---
 
